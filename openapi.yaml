@@ -5,6 +5,10 @@ info:
   description: API First
 servers:
   - url: http://localhost:3000
+components:
+  schemas:
+    HelloResponse:
+      type: object
 paths:
   /hello:
     get:
@@ -16,7 +20,88 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HelloResponse'
-components:
-  schemas:
-    HelloResponse:
-      type: object
+  /users:
+    post:
+      summary: Crear un nuevo usuario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                age:
+                  type: integer
+                  format: int32
+                phone:
+                  type: string
+              required:
+                - name
+                - email
+                - phone
+      responses:
+        '201':
+          description: Usuario creado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    format: int64
+                  name:
+                    type: string
+                  email:
+                    type: string
+                  age:
+                    type: integer
+                    format: int32
+                  phone:
+                    type: string
+  /users/{id}:
+    get:
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Obtener usuario por ID
+          schema:
+            type: integer
+            format: int64
+      summary: Obtener usuario por ID
+      responses:
+        '200':
+          description: Usuario encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    format: int64
+                  name:
+                    type: string
+                  email:
+                    type: string
+                  age:
+                    type: integer
+                    format: int32
+                  phone:
+                    type: string
+        '404':
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Usuario no encontrado example
+                
