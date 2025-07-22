@@ -20,6 +20,8 @@ externalDocs:
   description: Find out more about Swagger at https://swagger.io
   url: https://swagger.io
 tags:
+  - name: Auth
+    description: Endpoints related to authentication and authorization
   - name: Hello
     description: Endpoints related to the Hello functionality
   - name: Users
@@ -38,6 +40,133 @@ components:
   schemas:
     HelloResponse:
       type: object
+      properties:
+        message:
+          type: string
+          example: "Hello Rafael"
+    User:
+      type: object
+      required:
+        - name
+        - email
+        - phone
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1001
+        name:
+          type: string
+          example: "María González Rodríguez"
+        email:
+          type: string
+          format: email
+          example: "maria.gonzalez@email.com"
+        age:
+          type: integer
+          format: int32
+          example: 28
+        phone:
+          type: string
+          example: "+57 300 123 4567"
+        password:
+          type: string
+          format: password
+          writeOnly: true
+          minLength: 6
+          example: "mySecurePassword123"
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+          example: "2024-01-15T10:30:00Z"
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          example: "maria.gonzalez@email.com"
+        password:
+          type: string
+          format: password
+          minLength: 6
+          example: "mySecurePassword123"
+    LoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMDEsImVtYWlsIjoibWFyaWEuZ29uemFsZXpAZW1haWwuY29tIiwiaWF0IjoxNjQyMjQ4NjAwLCJleHAiOjE2NDIzMzUwMDB9.xyz123"
+        user:
+          type: object
+          properties:
+            id:
+              type: integer
+              format: int64
+              example: 1001
+            name:
+              type: string
+              example: "María González Rodríguez"
+            email:
+              type: string
+              example: "maria.gonzalez@email.com"
+            age:
+              type: integer
+              example: 28
+            phone:
+              type: string
+              example: "+57 300 123 4567"
+        expiresIn:
+          type: string
+          example: "24h"
+    RegisterRequest:
+      type: object
+      required:
+        - name
+        - email
+        - password
+        - phone
+      properties:
+        name:
+          type: string
+          minLength: 2
+          maxLength: 100
+          example: "María González Rodríguez"
+        email:
+          type: string
+          format: email
+          example: "maria.gonzalez@email.com"
+        password:
+          type: string
+          format: password
+          minLength: 6
+          example: "mySecurePassword123"
+        age:
+          type: integer
+          format: int32
+          minimum: 13
+          maximum: 120
+          example: 28
+        phone:
+          type: string
+          example: "+57 300 123 4567"
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Credenciales inválidas"
+        error:
+          type: string
+          example: "INVALID_CREDENTIALS"
+        timestamp:
+          type: string
+          format: date-time
+          example: "2024-01-15T10:30:00Z"
     Product:
       type: object
       required:
@@ -88,7 +217,235 @@ components:
               comment:
                 type: string
                 maxLength: 500
+  securitySchemes:
+    JWT:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        JSON Web Token authentication. Include the token in the `Authorization` header as follows:
+        ```
+        Authorization: Bearer <token>
+        ```
 paths:
+  /auth/register:
+    post:
+      tags:
+        - Auth
+      summary: Registrar un nuevo usuario
+      description: Crea una nueva cuenta de usuario en el sistema
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+            examples:
+              registro_completo:
+                summary: Registro con todos los campos
+                value:
+                  name: "Carlos Mendoza López"
+                  email: "carlos.mendoza@gmail.com"
+                  password: "miPasswordSeguro123"
+                  age: 25
+                  phone: "+57 310 987 6543"
+              registro_minimo:
+                summary: Registro con campos mínimos
+                value:
+                  name: "Ana Patricia Vásquez"
+                  email: "ana.vasquez@empresa.com"
+                  password: "password123"
+                  phone: "+57 320 456 7890"
+      responses:
+        '201':
+          description: Usuario registrado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+              examples:
+                usuario_registrado:
+                  summary: Usuario registrado exitosamente
+                  value:
+                    token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMDIsImVtYWlsIjoiY2FybG9zLm1lbmRvemFAZ21haWwuY29tIiwiaWF0IjoxNjQyMjQ4NjAwLCJleHAiOjE2NDIzMzUwMDB9.abc456"
+                    user:
+                      id: 1002
+                      name: "Carlos Mendoza López"
+                      email: "carlos.mendoza@gmail.com"
+                      age: 25
+                      phone: "+57 310 987 6543"
+                    expiresIn: "24h"
+        '400':
+          description: Datos de registro inválidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                email_existente:
+                  summary: Email ya registrado
+                  value:
+                    message: "Este email ya está registrado en el sistema"
+                    error: "EMAIL_ALREADY_EXISTS"
+                    timestamp: "2024-01-15T10:30:00Z"
+                password_debil:
+                  summary: Contraseña muy débil
+                  value:
+                    message: "La contraseña debe tener al menos 6 caracteres"
+                    error: "WEAK_PASSWORD"
+                    timestamp: "2024-01-15T10:30:00Z"
+        '422':
+          description: Error de validación
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                validacion_error:
+                  summary: Error de validación de campos
+                  value:
+                    message: "Datos de entrada inválidos"
+                    error: "VALIDATION_ERROR"
+                    timestamp: "2024-01-15T10:30:00Z"
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Iniciar sesión
+      description: Autentica un usuario y devuelve un token JWT
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+            examples:
+              login_usuario:
+                summary: Login de usuario existente
+                value:
+                  email: "maria.gonzalez@email.com"
+                  password: "mySecurePassword123"
+              login_admin:
+                summary: Login de administrador
+                value:
+                  email: "admin@tienda.com"
+                  password: "adminPassword456"
+      responses:
+        '200':
+          description: Login exitoso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+              examples:
+                login_exitoso:
+                  summary: Login exitoso
+                  value:
+                    token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMDEsImVtYWlsIjoibWFyaWEuZ29uemFsZXpAZW1haWwuY29tIiwiaWF0IjoxNjQyMjQ4NjAwLCJleHAiOjE2NDIzMzUwMDB9.xyz123"
+                    user:
+                      id: 1001
+                      name: "María González Rodríguez"
+                      email: "maria.gonzalez@email.com"
+                      age: 28
+                      phone: "+57 300 123 4567"
+                    expiresIn: "24h"
+        '401':
+          description: Credenciales inválidas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                credenciales_invalidas:
+                  summary: Email o contraseña incorrectos
+                  value:
+                    message: "Credenciales inválidas. Verifica tu email y contraseña."
+                    error: "INVALID_CREDENTIALS"
+                    timestamp: "2024-01-15T10:30:00Z"
+                usuario_no_encontrado:
+                  summary: Usuario no encontrado
+                  value:
+                    message: "No existe una cuenta con este email"
+                    error: "USER_NOT_FOUND"
+                    timestamp: "2024-01-15T10:30:00Z"
+        '400':
+          description: Datos de login inválidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                datos_faltantes:
+                  summary: Faltan datos requeridos
+                  value:
+                    message: "Email y contraseña son requeridos"
+                    error: "MISSING_CREDENTIALS"
+                    timestamp: "2024-01-15T10:30:00Z"
+  /auth/me:
+    get:
+      tags:
+        - Auth
+      summary: Obtener perfil del usuario autenticado
+      description: Devuelve la información del usuario que está autenticado
+      security:
+        - JWT: []
+      responses:
+        '200':
+          description: Información del usuario autenticado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    format: int64
+                    example: 1001
+                  name:
+                    type: string
+                    example: "María González Rodríguez"
+                  email:
+                    type: string
+                    example: "maria.gonzalez@email.com"
+                  age:
+                    type: integer
+                    example: 28
+                  phone:
+                    type: string
+                    example: "+57 300 123 4567"
+                  createdAt:
+                    type: string
+                    format: date-time
+                    example: "2024-01-10T08:00:00Z"
+              examples:
+                perfil_usuario:
+                  summary: Perfil del usuario autenticado
+                  value:
+                    id: 1001
+                    name: "María González Rodríguez"
+                    email: "maria.gonzalez@email.com"
+                    age: 28
+                    phone: "+57 300 123 4567"
+                    createdAt: "2024-01-10T08:00:00Z"
+        '401':
+          description: Token no válido o expirado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                token_invalido:
+                  summary: Token inválido
+                  value:
+                    message: "Token de autenticación inválido"
+                    error: "INVALID_TOKEN"
+                    timestamp: "2024-01-15T10:30:00Z"
+                token_expirado:
+                  summary: Token expirado
+                  value:
+                    message: "El token ha expirado. Por favor, inicia sesión nuevamente."
+                    error: "TOKEN_EXPIRED"
+                    timestamp: "2024-01-15T10:30:00Z"
   /hello:
     get:
       tags:
@@ -390,6 +747,8 @@ paths:
       tags:
         - Products
       summary: Crear un nuevo producto
+      security:
+        - JWT: []
       requestBody:
         required: true
         content:
@@ -528,6 +887,19 @@ paths:
                   summary: Error en categoría
                   value:
                     message: "La categoría debe ser una de: electronics, clothing, books, food"
+        '401':
+          description: No autorizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                no_autorizado:
+                  summary: Token requerido
+                  value:
+                    message: "Token de autenticación requerido"
+                    error: "UNAUTHORIZED"
+                    timestamp: "2024-01-15T10:30:00Z"
   /products/{id}:
     get:
       tags:
@@ -610,6 +982,8 @@ paths:
     put:
       tags:
         - Products
+      security:
+        - JWT: []
       parameters:
         - name: id
           in: path
@@ -684,6 +1058,8 @@ paths:
     patch:
       tags:
         - Products
+      security:
+        - JWT: []
       parameters:
         - name: id
           in: path
@@ -754,6 +1130,8 @@ paths:
     delete:
       tags:
         - Products
+      security:
+        - JWT: []
       parameters:
         - name: id
           in: path

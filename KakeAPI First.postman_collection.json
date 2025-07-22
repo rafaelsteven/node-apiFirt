@@ -1,0 +1,1652 @@
+{
+	"info": {
+		"_postman_id": "3c416960-2266-45ce-999d-7c6992dacb25",
+		"name": "KakeAPI First",
+		"description": "This is a sample FakeAPI Store Server based on the OpenAPI 3.X specification. You can find out more about Swagger at https://swagger.io. \nIn the third iteration of the pet store, we've switched to the design first approach. You can now help us improve the API whether it's by \nmaking changes to the definition itself or to the code. That way, with time, we can improve the API in general, and expose some of the new features in OAS3.\n\nSome useful links:\n- [The Fake Store repository](https://github.com/rafaelsteven/node-apiFirt.git)\n\n\nContact Support:\n Name: Rafael Steven Vera\n Email: rafaelvera@gmail.com",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20443361"
+	},
+	"item": [
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "{id}",
+					"item": [
+						{
+							"name": "Obtener usuario por ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Response status code is 404\", function () {",
+											"    pm.expect(pm.response.code).to.equal(404);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Response should contain a message field\", function () {",
+											"    const responseData = pm.response.json();",
+											"    ",
+											"    pm.expect(responseData).to.be.an('object');",
+											"    pm.expect(responseData).to.have.property('message');",
+											"});",
+											"",
+											"",
+											"pm.test(\"Message is a non-empty string\", function () {",
+											"    const responseData = pm.response.json();",
+											"    ",
+											"    pm.expect(responseData).to.be.an('object');",
+											"    pm.expect(responseData.message).to.exist.and.to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+											"});",
+											"",
+											"",
+											"pm.test(\"Response content type is application/json\", function () {",
+											"    pm.expect(pm.response.headers.get('Content-Type')).to.include(\"application/json\");",
+											"});",
+											"",
+											"",
+											"pm.test(\"Response time is less than 200ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/users/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "-25988534",
+											"description": "(Required) Obtener usuario por ID"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Usuario encontrado",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/users/:id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"users",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "-25988534",
+													"description": "(Required) Obtener usuario por ID"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"id\": 1001,\n  \"name\": \"María González Rodríguez\",\n  \"email\": \"maria.gonzalez@email.com\",\n  \"age\": 28,\n  \"phone\": \"+57 300 123 4567\"\n}"
+								},
+								{
+									"name": "Usuario no encontrado",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/users/:id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"users",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "-25988534",
+													"description": "(Required) Obtener usuario por ID"
+												}
+											]
+										}
+									},
+									"status": "Not Found",
+									"code": 404,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"message\": \"Usuario con ID 9999 no encontrado\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Actualizar un usuario existente",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Response status code is 404\", function () {",
+											"    pm.expect(pm.response.code).to.eql(404);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Response should contain a message field\", function () {",
+											"    const responseData = pm.response.json();",
+											"    ",
+											"    pm.expect(responseData).to.be.an('object').that.includes.keys('message');",
+											"});",
+											"",
+											"",
+											"pm.test(\"Message is a non-empty string\", function () {",
+											"    const responseData = pm.response.json();",
+											"    ",
+											"    pm.expect(responseData).to.be.an('object');",
+											"    pm.expect(responseData.message).to.exist.and.to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+											"});",
+											"",
+											"",
+											"pm.test(\"Response content type is application/json\", function () {",
+											"    pm.expect(pm.response.headers.get('Content-Type')).to.include(\"application/json\");",
+											"});",
+											"",
+											"",
+											"pm.test(\"Response time is less than 200ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"nulla mollit Excepteur\",\n  \"email\": \"veli\",\n  \"phone\": \"aute voluptate quis laboris\",\n  \"age\": -79020972\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/users/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "-25988534",
+											"description": "(Required) ID del usuario a actualizar"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Usuario actualizado exitosamente",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"name\": \"nulla mollit Excepteur\",\n  \"email\": \"veli\",\n  \"phone\": \"aute voluptate quis laboris\",\n  \"age\": -79020972\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/users/:id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"users",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "-25988534",
+													"description": "(Required) ID del usuario a actualizar"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"id\": 93722058,\n  \"name\": \"consectetur ullamco in aliqua\",\n  \"email\": \"dolor irure\",\n  \"age\": 34405176,\n  \"phone\": \"laboris nostru\"\n}"
+								},
+								{
+									"name": "Usuario no encontrado",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"name\": \"nulla mollit Excepteur\",\n  \"email\": \"veli\",\n  \"phone\": \"aute voluptate quis laboris\",\n  \"age\": -79020972\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/users/:id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"users",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "-25988534",
+													"description": "(Required) ID del usuario a actualizar"
+												}
+											]
+										}
+									},
+									"status": "Not Found",
+									"code": 404,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"message\": \"Usuario no encontrado example\"\n}"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Crear un nuevo usuario",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 201\", function () {",
+									"    pm.expect(pm.response.code).to.equal(201);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData).to.have.all.keys('id', 'name', 'email', 'age', 'phone');",
+									"});",
+									"",
+									"",
+									"pm.test(\"Email must be in a valid format\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.email).to.exist;",
+									"    pm.expect(responseData.email).to.match(/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/, \"Email format is invalid\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Age must be a non-negative integer\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.age).to.be.a('number').and.to.be.at.least(0, \"Age should be a non-negative integer\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Phone is in a valid format\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.phone).to.exist;",
+									"    pm.expect(responseData.phone).to.match(/^\\+?[1-9]\\d{1,14}$/); // Example regex for international phone number format",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"nulla mollit Excepteur\",\n  \"email\": \"veli\",\n  \"phone\": \"aute voluptate quis laboris\",\n  \"age\": -79020972\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Usuario creado exitosamente",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"nulla mollit Excepteur\",\n  \"email\": \"veli\",\n  \"phone\": \"aute voluptate quis laboris\",\n  \"age\": -79020972\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/users",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"id\": 93722058,\n  \"name\": \"consectetur ullamco in aliqua\",\n  \"email\": \"dolor irure\",\n  \"age\": 34405176,\n  \"phone\": \"laboris nostru\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "products",
+			"item": [
+				{
+					"name": "{id}",
+					"item": [
+						{
+							"name": "Obtener producto por ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Response status code is 404\", function () {",
+											"    pm.expect(pm.response.code).to.eql(404);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Response has the required fields\", function () {",
+											"    const responseData = pm.response.json();",
+											"    ",
+											"    pm.expect(responseData).to.be.an('object');",
+											"    pm.expect(responseData).to.have.property('message');",
+											"});",
+											"",
+											"",
+											"pm.test(\"Message is a non-empty string\", function () {",
+											"    const responseData = pm.response.json();",
+											"    ",
+											"    pm.expect(responseData).to.be.an('object');",
+											"    pm.expect(responseData.message).to.exist.and.to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+											"});",
+											"",
+											"",
+											"pm.test(\"Response content type is application/json\", function () {",
+											"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+											"});",
+											"",
+											"",
+											"pm.test(\"Response time is less than 200ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/products/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"products",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "-25988534",
+											"description": "(Required) ID del producto"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Producto encontrado",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/products/:id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"products",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "-25988534",
+													"description": "(Required) ID del producto"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"id\": 1,\n  \"name\": \"iPhone 15 Pro Max 256GB\",\n  \"description\": \"El iPhone 15 Pro Max redefine la innovación con su diseño de titanio, cámara profesional de 48MP con zoom óptico 5x, y el potente chip A17 Pro.\",\n  \"category\": \"electronics\",\n  \"price\": 1399.99,\n  \"inStock\": true,\n  \"tags\": [\n    \"smartphone\",\n    \"apple\",\n    \"premium\",\n    \"5g\",\n    \"titanium\"\n  ],\n  \"specifications\": {\n    \"brand\": \"Apple\",\n    \"model\": \"iPhone 15 Pro Max\",\n    \"storage\": \"256GB\",\n    \"color\": \"Titanio Natural\",\n    \"screen_size\": \"6.7 pulgadas\",\n    \"camera\": \"48MP Principal + 12MP Ultra Gran Angular + 12MP Teleobjetivo\"\n  },\n  \"ratings\": [\n    {\n      \"score\": 5,\n      \"comment\": \"Excelente teléfono, la cámara es increíble y la batería dura todo el día\"\n    },\n    {\n      \"score\": 4,\n      \"comment\": \"Muy buena calidad, aunque el precio es elevado\"\n    }\n  ]\n}"
+								},
+								{
+									"name": "Producto no encontrado",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/products/:id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"products",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "-25988534",
+													"description": "(Required) ID del producto"
+												}
+											]
+										}
+									},
+									"status": "Not Found",
+									"code": 404,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"message\": \"Producto con ID 9999 no encontrado\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Actualizar completamente un producto",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Response status code is 404\", function () {",
+											"    pm.expect(pm.response.code).to.eql(404);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Response contains a message field\", function () {",
+											"    const responseData = pm.response.json();",
+											"    ",
+											"    pm.expect(responseData).to.have.property('message');",
+											"});",
+											"",
+											"",
+											"pm.test(\"Message is a non-empty string\", function () {",
+											"    const responseData = pm.response.json();",
+											"    ",
+											"    pm.expect(responseData).to.be.an('object');",
+											"    pm.expect(responseData.message).to.exist.and.to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+											"});",
+											"",
+											"",
+											"pm.test(\"Response time is less than 200ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(200);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Content-Type is application/json\", function () {",
+											"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json');",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"irure \",\n  \"price\": 23493048.89,\n  \"category\": \"books\",\n  \"description\": \"consectetur\",\n  \"inStock\": true,\n  \"tags\": [\n    \"Lorem proident minim\",\n    \"do culpa esse\"\n  ],\n  \"specifications\": {\n    \"dolor_6bf\": \"voluptate deserunt\",\n    \"laborum8\": \"do cupidatat\",\n    \"dolore_3d\": \"labore\"\n  }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/products/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"products",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "-25988534",
+											"description": "(Required) ID del producto a actualizar"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Producto actualizado exitosamente",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"name\": \"nulla aliqua\",\n  \"price\": 47324019.550000004,\n  \"category\": \"clothing\",\n  \"description\": \"voluptate est\",\n  \"inStock\": false,\n  \"tags\": [\n    \"eu Lorem\",\n    \"mollit amet\"\n  ],\n  \"specifications\": {\n    \"in_ed\": \"commodo\"\n  }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/products/:id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"products",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "-25988534",
+													"description": "(Required) ID del producto a actualizar"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"name\": \"ad labore voluptate tempor\",\n  \"price\": 2016743,\n  \"category\": \"books\",\n  \"id\": -48720763,\n  \"description\": \"cillum laborum quis dolor\",\n  \"inStock\": true,\n  \"tags\": [\n    \"Ut aliquip mollit in incididunt\",\n    \"anim cupidatat sit commodo non\"\n  ],\n  \"specifications\": {\n    \"quis918\": \"eiusmod sunt pariatur esse\",\n    \"consequatefd\": \"culpa\",\n    \"veniam__8\": \"aute velit co\"\n  },\n  \"ratings\": [\n    {\n      \"score\": 3,\n      \"comment\": \"exercitation eu ea\"\n    },\n    {\n      \"score\": 2,\n      \"comment\": \"aliqua mollit\"\n    }\n  ]\n}"
+								},
+								{
+									"name": "Datos inválidos",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"name\": \"nulla aliqua\",\n  \"price\": 47324019.550000004,\n  \"category\": \"clothing\",\n  \"description\": \"voluptate est\",\n  \"inStock\": false,\n  \"tags\": [\n    \"eu Lorem\",\n    \"mollit amet\"\n  ],\n  \"specifications\": {\n    \"in_ed\": \"commodo\"\n  }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/products/:id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"products",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "-25988534",
+													"description": "(Required) ID del producto a actualizar"
+												}
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"message\": \"Datos del producto inválidos\"\n}"
+								},
+								{
+									"name": "Producto no encontrado",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"name\": \"nulla aliqua\",\n  \"price\": 47324019.550000004,\n  \"category\": \"clothing\",\n  \"description\": \"voluptate est\",\n  \"inStock\": false,\n  \"tags\": [\n    \"eu Lorem\",\n    \"mollit amet\"\n  ],\n  \"specifications\": {\n    \"in_ed\": \"commodo\"\n  }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/products/:id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"products",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "-25988534",
+													"description": "(Required) ID del producto a actualizar"
+												}
+											]
+										}
+									},
+									"status": "Not Found",
+									"code": 404,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"message\": \"Producto no encontrado\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Actualizar parcialmente un producto",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Response status code is 404\", function () {",
+											"    pm.expect(pm.response.code).to.equal(404);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Response has a valid Content-Type header\", function () {",
+											"    pm.expect(pm.response.headers.get('Content-Type')).to.equal('application/json');",
+											"});",
+											"",
+											"",
+											"pm.test(\"Response body contains a 'message' field\", function () {",
+											"    const responseData = pm.response.json();",
+											"    ",
+											"    pm.expect(responseData).to.be.an('object');",
+											"    pm.expect(responseData).to.have.property('message');",
+											"});",
+											"",
+											"",
+											"pm.test(\"The message field must be a non-empty string\", function () {",
+											"    const responseData = pm.response.json();",
+											"    ",
+											"    pm.expect(responseData).to.be.an('object');",
+											"    pm.expect(responseData.message).to.exist.and.to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+											"});",
+											"",
+											"",
+											"pm.test(\"Response time is less than 200ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"dolore consequat\",\n  \"description\": \"nisi\",\n  \"category\": \"clothing\",\n  \"inStock\": true,\n  \"tags\": [\n    \"consequat et Ut qui dolor\",\n    \"ipsum magna pariat\"\n  ],\n  \"price\": 11912351.15,\n  \"specifications\": {\n    \"qui_9\": \"tempor enim minim\"\n  }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/products/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"products",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "-25988534",
+											"description": "(Required) ID del producto a actualizar parcialmente"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Producto actualizado exitosamente",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"name\": \"velit nostrud\",\n  \"description\": \"est esse sed\",\n  \"category\": \"books\",\n  \"inStock\": true,\n  \"tags\": [\n    \"\",\n    \"aliquip e\"\n  ],\n  \"price\": 31290133.16,\n  \"specifications\": {\n    \"ad_b\": \"r\"\n  }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/products/:id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"products",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "-25988534",
+													"description": "(Required) ID del producto a actualizar parcialmente"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"name\": \"ad labore voluptate tempor\",\n  \"price\": 2016743,\n  \"category\": \"books\",\n  \"id\": -48720763,\n  \"description\": \"cillum laborum quis dolor\",\n  \"inStock\": true,\n  \"tags\": [\n    \"Ut aliquip mollit in incididunt\",\n    \"anim cupidatat sit commodo non\"\n  ],\n  \"specifications\": {\n    \"quis918\": \"eiusmod sunt pariatur esse\",\n    \"consequatefd\": \"culpa\",\n    \"veniam__8\": \"aute velit co\"\n  },\n  \"ratings\": [\n    {\n      \"score\": 3,\n      \"comment\": \"exercitation eu ea\"\n    },\n    {\n      \"score\": 2,\n      \"comment\": \"aliqua mollit\"\n    }\n  ]\n}"
+								},
+								{
+									"name": "Datos inválidos",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"name\": \"velit nostrud\",\n  \"description\": \"est esse sed\",\n  \"category\": \"books\",\n  \"inStock\": true,\n  \"tags\": [\n    \"\",\n    \"aliquip e\"\n  ],\n  \"price\": 31290133.16,\n  \"specifications\": {\n    \"ad_b\": \"r\"\n  }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/products/:id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"products",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "-25988534",
+													"description": "(Required) ID del producto a actualizar parcialmente"
+												}
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"message\": \"Datos del producto inválidos\"\n}"
+								},
+								{
+									"name": "Producto no encontrado",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"name\": \"velit nostrud\",\n  \"description\": \"est esse sed\",\n  \"category\": \"books\",\n  \"inStock\": true,\n  \"tags\": [\n    \"\",\n    \"aliquip e\"\n  ],\n  \"price\": 31290133.16,\n  \"specifications\": {\n    \"ad_b\": \"r\"\n  }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/products/:id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"products",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "-25988534",
+													"description": "(Required) ID del producto a actualizar parcialmente"
+												}
+											]
+										}
+									},
+									"status": "Not Found",
+									"code": 404,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"message\": \"Producto no encontrado\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Eliminar un producto",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Response status code is 404\", function () {",
+											"    pm.expect(pm.response.code).to.equal(404);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Response has a message field\", function () {",
+											"    const responseData = pm.response.json();",
+											"    ",
+											"    pm.expect(responseData).to.be.an('object');",
+											"    pm.expect(responseData).to.have.property('message');",
+											"});",
+											"",
+											"",
+											"pm.test(\"Message is a non-empty string\", function () {",
+											"    const responseData = pm.response.json();",
+											"    ",
+											"    pm.expect(responseData).to.be.an('object');",
+											"    pm.expect(responseData.message).to.exist.and.to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+											"});",
+											"",
+											"",
+											"pm.test(\"Response time is less than 200ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(200);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Content-Type is application/json\", function () {",
+											"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json');",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/products/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"products",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "-25988534",
+											"description": "(Required) ID del producto a eliminar"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Producto eliminado exitosamente",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/products/:id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"products",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "-25988534",
+													"description": "(Required) ID del producto a eliminar"
+												}
+											]
+										}
+									},
+									"status": "No Content",
+									"code": 204,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "null"
+								},
+								{
+									"name": "Producto no encontrado",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/products/:id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"products",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "-25988534",
+													"description": "(Required) ID del producto a eliminar"
+												}
+											]
+										}
+									},
+									"status": "Not Found",
+									"code": 404,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"message\": \"Producto con ID 9999 no encontrado para eliminar\"\n}"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Obtener todos los productos",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the correct Content-Type header\", function () {",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json');",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response is an empty array\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('array').that.is.empty;",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response time is less than 200ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Query parameters are correctly processed\", function () {",
+									"    const queryParams = pm.request.url.query;",
+									"",
+									"    const categoryParam = queryParams.find(param => param.key === 'category');",
+									"    const inStockParam = queryParams.find(param => param.key === 'inStock');",
+									"    const minPriceParam = queryParams.find(param => param.key === 'minPrice');",
+									"    const maxPriceParam = queryParams.find(param => param.key === 'maxPrice');",
+									"",
+									"    pm.expect(categoryParam).to.exist.and.to.have.property('value', 'books');",
+									"    pm.expect(inStockParam).to.exist.and.to.have.property('value', 'true');",
+									"    pm.expect(minPriceParam).to.exist.and.to.have.property('value', '27259508.6858582');",
+									"    pm.expect(maxPriceParam).to.exist.and.to.have.property('value', '27259508.6858582');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/products?category=books&inStock=true&minPrice=27259508.6858582&maxPrice=27259508.6858582",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "books"
+								},
+								{
+									"key": "inStock",
+									"value": "true"
+								},
+								{
+									"key": "minPrice",
+									"value": "27259508.6858582"
+								},
+								{
+									"key": "maxPrice",
+									"value": "27259508.6858582"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Lista de productos",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/products?category=books&inStock=true&minPrice=27259508.6858582&maxPrice=27259508.6858582",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"products"
+									],
+									"query": [
+										{
+											"key": "category",
+											"value": "books"
+										},
+										{
+											"key": "inStock",
+											"value": "true"
+										},
+										{
+											"key": "minPrice",
+											"value": "27259508.6858582"
+										},
+										{
+											"key": "maxPrice",
+											"value": "27259508.6858582"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "[\n  {\n    \"id\": 1,\n    \"name\": \"iPhone 15 Pro Max 256GB\",\n    \"description\": \"El iPhone 15 Pro Max redefine la innovación con su diseño de titanio, cámara profesional de 48MP con zoom óptico 5x, y el potente chip A17 Pro.\",\n    \"category\": \"electronics\",\n    \"price\": 1399.99,\n    \"inStock\": true,\n    \"tags\": [\n      \"smartphone\",\n      \"apple\",\n      \"premium\",\n      \"5g\"\n    ],\n    \"specifications\": {\n      \"brand\": \"Apple\",\n      \"storage\": \"256GB\",\n      \"color\": \"Titanio Natural\"\n    },\n    \"ratings\": [\n      {\n        \"score\": 5,\n        \"comment\": \"Excelente teléfono, la cámara es increíble\"\n      }\n    ]\n  },\n  {\n    \"id\": 2,\n    \"name\": \"Nike Air Max 270 React\",\n    \"description\": \"Zapatillas deportivas con tecnología Air Max y suela React para máxima comodidad y estilo urbano.\",\n    \"category\": \"clothing\",\n    \"price\": 180,\n    \"inStock\": true,\n    \"tags\": [\n      \"zapatillas\",\n      \"nike\",\n      \"deporte\",\n      \"casual\"\n    ],\n    \"specifications\": {\n      \"brand\": \"Nike\",\n      \"size\": \"42\",\n      \"color\": \"Negro/Blanco\",\n      \"material\": \"Mesh y sintético\"\n    },\n    \"ratings\": [\n      {\n        \"score\": 4,\n        \"comment\": \"Muy cómodas para correr\"\n      }\n    ]\n  },\n  {\n    \"id\": 3,\n    \"name\": \"Cien Años de Soledad\",\n    \"description\": \"Obra maestra de Gabriel García Márquez. Edición conmemorativa del clásico del realismo mágico latinoamericano.\",\n    \"category\": \"books\",\n    \"price\": 25.99,\n    \"inStock\": false,\n    \"tags\": [\n      \"literatura\",\n      \"clásico\",\n      \"realismo mágico\",\n      \"latinoamérica\"\n    ],\n    \"specifications\": {\n      \"author\": \"Gabriel García Márquez\",\n      \"pages\": \"432\",\n      \"publisher\": \"Editorial Sudamericana\",\n      \"language\": \"Español\"\n    },\n    \"ratings\": [\n      {\n        \"score\": 5,\n        \"comment\": \"Una obra maestra de la literatura\"\n      }\n    ]\n  }\n]"
+						}
+					]
+				},
+				{
+					"name": "Crear un nuevo producto",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 400\", function () {",
+									"    pm.expect(pm.response.code).to.eql(400);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response contains a message field\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData).to.have.property('message').that.is.a('string');",
+									"});",
+									"",
+									"",
+									"pm.test(\"Error array is present and contains at least one element\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.error).to.be.an('array').that.is.not.empty;",
+									"});",
+									"",
+									"",
+									"pm.test(\"Each error object in the array has the required fields\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.error).to.be.an('array').that.is.not.empty;",
+									"",
+									"    responseData.error.forEach(function(error) {",
+									"        pm.expect(error).to.be.an('object');",
+									"        pm.expect(error).to.have.all.keys('path', 'message', 'errorCode');",
+									"    });",
+									"});",
+									"",
+									"",
+									"pm.test(\"Error code should be a non-empty string\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.error).to.be.an('array').that.is.not.empty;",
+									"    ",
+									"    responseData.error.forEach(function(err) {",
+									"        pm.expect(err.errorCode).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Error code should not be empty\");",
+									"    });",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"MacBook Pro 14 M3\",\n  \"description\": \"Laptop profesional con chip M3, pantalla Liquid Retina XDR de 14 pulgadas y hasta 22 horas de batería.\",\n  \"category\": \"electronics\",\n  \"price\": 2399.99,\n  \"inStock\": true,\n  \"tags\": [\n    \"laptop\",\n    \"apple\",\n    \"profesional\",\n    \"m3\"\n  ],\n  \"specifications\": {\n    \"brand\": \"Apple\",\n    \"processor\": \"M3\",\n    \"ram\": \"16GB\",\n    \"storage\": \"512GB SSD\"\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/products",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Producto creado exitosamente",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"MacBook Pro 14 M3\",\n  \"description\": \"Laptop profesional con chip M3, pantalla Liquid Retina XDR de 14 pulgadas y hasta 22 horas de batería.\",\n  \"category\": \"electronics\",\n  \"price\": 2399.99,\n  \"inStock\": true,\n  \"tags\": [\n    \"laptop\",\n    \"apple\",\n    \"profesional\",\n    \"m3\"\n  ],\n  \"specifications\": {\n    \"brand\": \"Apple\",\n    \"processor\": \"M3\",\n    \"ram\": \"16GB\",\n    \"storage\": \"512GB SSD\"\n  }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/products",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"products"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"id\": 12345,\n  \"name\": \"MacBook Pro 14 M3\",\n  \"description\": \"Laptop profesional con chip M3, pantalla Liquid Retina XDR de 14 pulgadas y hasta 22 horas de batería.\",\n  \"category\": \"electronics\",\n  \"price\": 2399.99,\n  \"inStock\": true,\n  \"tags\": [\n    \"laptop\",\n    \"apple\",\n    \"profesional\",\n    \"m3\"\n  ],\n  \"specifications\": {\n    \"brand\": \"Apple\",\n    \"processor\": \"M3\",\n    \"ram\": \"16GB\",\n    \"storage\": \"512GB SSD\"\n  },\n  \"ratings\": []\n}"
+						},
+						{
+							"name": "Datos inválidos",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"MacBook Pro 14 M3\",\n  \"description\": \"Laptop profesional con chip M3, pantalla Liquid Retina XDR de 14 pulgadas y hasta 22 horas de batería.\",\n  \"category\": \"electronics\",\n  \"price\": 2399.99,\n  \"inStock\": true,\n  \"tags\": [\n    \"laptop\",\n    \"apple\",\n    \"profesional\",\n    \"m3\"\n  ],\n  \"specifications\": {\n    \"brand\": \"Apple\",\n    \"processor\": \"M3\",\n    \"ram\": \"16GB\",\n    \"storage\": \"512GB SSD\"\n  }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/products",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"products"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message\": \"El nombre del producto debe tener entre 3 y 60 caracteres\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Hello Rafael",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.expect(pm.response.code).to.eql(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response Content-Type is application/json\", function () {",
+							"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response contains the message field\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.have.property('message');",
+							"});",
+							"",
+							"",
+							"pm.test(\"The message must be a non-empty string\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.message).to.exist.and.to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/hello",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"hello"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "A successful response",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/hello",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"hello"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{}"
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3000/v1",
+			"type": "string"
+		}
+	]
+}
