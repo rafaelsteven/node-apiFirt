@@ -1,8 +1,34 @@
 openapi: 3.1.1
 info:
-  title: API First
-  version: 1.0.0
-  description: API First
+  title: KakeAPI First
+  version: 1.2.3
+  description: |
+    This is a sample FakeAPI Store Server based on the OpenAPI 3.X specification. You can find out more about Swagger at https://swagger.io. 
+    In the third iteration of the pet store, we've switched to the design first approach. You can now help us improve the API whether it's by 
+    making changes to the definition itself or to the code. That way, with time, we can improve the API in general, and expose some of the new features in OAS3.
+    
+    Some useful links:
+    - [The Fake Store repository](https://github.com/rafaelsteven/node-apiFirt.git)
+  termsOfService: https://example.com/terms
+  contact:
+    name: Rafael Steven Vera
+    url: https://rafaelsteven.com
+    email: rafaelvera@gmail.com
+  license:
+    name: MIT License
+externalDocs:
+  description: Find out more about Swagger at https://swagger.io
+  url: https://swagger.io
+tags:
+  - name: Hello
+    description: Endpoints related to the Hello functionality
+  - name: Users
+    description: Endpoints related to user management
+  - name: Products
+    description: Endpoints related to product management
+    externalDocs:
+      description: Find out more about the product management API
+      url: https://openai.com
 servers:
   - url: http://localhost:3000/v1
     description: version  1 de la API
@@ -65,6 +91,8 @@ components:
 paths:
   /hello:
     get:
+      tags:
+        - Hello
       summary: Hello Rafael
       responses:
         '200':
@@ -75,6 +103,8 @@ paths:
                 $ref: '#/components/schemas/HelloResponse'
   /users:
     post:
+      tags:
+        - Users
       summary: Crear un nuevo usuario
       requestBody:
         required: true
@@ -118,6 +148,8 @@ paths:
                     type: string
   /users/{id}:
     get:
+      tags:
+        - Users
       parameters:
         - name: id
           in: path
@@ -142,11 +174,23 @@ paths:
                     type: string
                   email:
                     type: string
+                    example: "maria.gonzalez@email.com"
                   age:
                     type: integer
                     format: int32
+                    example: 28
                   phone:
                     type: string
+                    example: "+57 300 123 4567"
+              examples:
+                usuario_encontrado:
+                  summary: Usuario encontrado
+                  value:
+                    id: 1001
+                    name: "María González Rodríguez"
+                    email: "maria.gonzalez@email.com"
+                    age: 28
+                    phone: "+57 300 123 4567"
         '404':
           description: Usuario no encontrado
           content:
@@ -156,8 +200,15 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Usuario no encontrado example
+                    example: "Usuario con ID 9999 no encontrado"
+              examples:
+                usuario_no_encontrado:
+                  summary: Usuario no encontrado
+                  value:
+                    message: "Usuario con ID 9999 no encontrado"
     patch:
+      tags:
+        - Users
       parameters:
         - name: id
           in: path
@@ -219,6 +270,8 @@ paths:
                     example: Usuario no encontrado example
   /products:
     get:
+      tags:
+        - Products
       summary: Obtener todos los productos
       parameters:
         - name: category
@@ -257,7 +310,85 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Product'
+              examples:
+                productos_variados:
+                  summary: Lista de productos variados
+                  value:
+                    - id: 1
+                      name: "iPhone 15 Pro Max 256GB"
+                      description: "El iPhone 15 Pro Max redefine la innovación con su diseño de titanio, cámara profesional de 48MP con zoom óptico 5x, y el potente chip A17 Pro."
+                      category: "electronics"
+                      price: 1399.99
+                      inStock: true
+                      tags: ["smartphone", "apple", "premium", "5g"]
+                      specifications:
+                        brand: "Apple"
+                        storage: "256GB"
+                        color: "Titanio Natural"
+                      ratings:
+                        - score: 5
+                          comment: "Excelente teléfono, la cámara es increíble"
+                    - id: 2
+                      name: "Nike Air Max 270 React"
+                      description: "Zapatillas deportivas con tecnología Air Max y suela React para máxima comodidad y estilo urbano."
+                      category: "clothing"
+                      price: 180.00
+                      inStock: true
+                      tags: ["zapatillas", "nike", "deporte", "casual"]
+                      specifications:
+                        brand: "Nike"
+                        size: "42"
+                        color: "Negro/Blanco"
+                        material: "Mesh y sintético"
+                      ratings:
+                        - score: 4
+                          comment: "Muy cómodas para correr"
+                    - id: 3
+                      name: "Cien Años de Soledad"
+                      description: "Obra maestra de Gabriel García Márquez. Edición conmemorativa del clásico del realismo mágico latinoamericano."
+                      category: "books"
+                      price: 25.99
+                      inStock: false
+                      tags: ["literatura", "clásico", "realismo mágico", "latinoamérica"]
+                      specifications:
+                        author: "Gabriel García Márquez"
+                        pages: "432"
+                        publisher: "Editorial Sudamericana"
+                        language: "Español"
+                      ratings:
+                        - score: 5
+                          comment: "Una obra maestra de la literatura"
+                productos_electronicos:
+                  summary: Solo productos electrónicos
+                  value:
+                    - id: 1
+                      name: "iPhone 15 Pro Max 256GB"
+                      description: "El iPhone 15 Pro Max redefine la innovación con su diseño de titanio."
+                      category: "electronics"
+                      price: 1399.99
+                      inStock: true
+                      tags: ["smartphone", "apple", "premium"]
+                      specifications:
+                        brand: "Apple"
+                        storage: "256GB"
+                      ratings: []
+                    - id: 4
+                      name: "Samsung Galaxy S24 Ultra"
+                      description: "Smartphone premium con S Pen integrado, cámara de 200MP y pantalla Dynamic AMOLED 2X."
+                      category: "electronics"
+                      price: 1299.99
+                      inStock: true
+                      tags: ["smartphone", "samsung", "s-pen", "android"]
+                      specifications:
+                        brand: "Samsung"
+                        storage: "512GB"
+                        color: "Titanium Gray"
+                      ratings:
+                        - score: 5
+                          comment: "El S Pen es genial para tomar notas"
     post:
+      tags:
+        - Products
       summary: Crear un nuevo producto
       requestBody:
         required: true
@@ -270,31 +401,86 @@ paths:
                   type: string
                   minLength: 3
                   maxLength: 60
+                  example: "MacBook Pro 14 M3"
                 description:
                   type: string
                   maxLength: 500
+                  example: "Laptop profesional con chip M3, pantalla Liquid Retina XDR de 14 pulgadas y hasta 22 horas de batería. Ideal para creadores de contenido y profesionales."
                 category:
                   type: string
                   enum: [electronics, clothing, books, food]
+                  example: "electronics"
                 inStock:
                   type: boolean
                   default: true
+                  example: true
                 tags:
                   type: array
                   items:
                     type: string
+                  example: ["laptop", "apple", "profesional", "m3"]
                 price:
                   type: number
                   minimum: 0
                   multipleOf: 0.01
+                  example: 2399.99
                 specifications:
                   type: object
                   additionalProperties:
                     type: string
+                  example:
+                    brand: "Apple"
+                    processor: "M3"
+                    ram: "16GB"
+                    storage: "512GB SSD"
+                    screen: "14 pulgadas Liquid Retina XDR"
               required:
                 - name
                 - price
                 - category
+            examples:
+              producto_electronico:
+                summary: Producto electrónico
+                value:
+                  name: "MacBook Pro 14 M3"
+                  description: "Laptop profesional con chip M3, pantalla Liquid Retina XDR de 14 pulgadas y hasta 22 horas de batería."
+                  category: "electronics"
+                  price: 2399.99
+                  inStock: true
+                  tags: ["laptop", "apple", "profesional", "m3"]
+                  specifications:
+                    brand: "Apple"
+                    processor: "M3"
+                    ram: "16GB"
+                    storage: "512GB SSD"
+              producto_ropa:
+                summary: Producto de ropa
+                value:
+                  name: "Chaqueta Adidas Originals"
+                  description: "Chaqueta deportiva clásica con las icónicas tres rayas, perfecta para el día a día o actividades deportivas."
+                  category: "clothing"
+                  price: 89.99
+                  inStock: true
+                  tags: ["chaqueta", "adidas", "deportiva", "casual"]
+                  specifications:
+                    brand: "Adidas"
+                    size: "L"
+                    material: "Poliéster reciclado"
+                    color: "Negro con rayas blancas"
+              producto_libro:
+                summary: Producto libro
+                value:
+                  name: "El Principito"
+                  description: "Clásico de la literatura universal. Una historia poética y filosófica que ha cautivado a lectores de todas las edades."
+                  category: "books"
+                  price: 18.50
+                  inStock: true
+                  tags: ["literatura", "clásico", "filosofía", "infantil"]
+                  specifications:
+                    author: "Antoine de Saint-Exupéry"
+                    pages: "96"
+                    publisher: "Editorial Planeta"
+                    isbn: "978-84-08-12345-6"
       responses:
         '201':
           description: Producto creado exitosamente
@@ -302,6 +488,23 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
+              examples:
+                producto_creado:
+                  summary: Producto creado exitosamente
+                  value:
+                    id: 12345
+                    name: "MacBook Pro 14 M3"
+                    description: "Laptop profesional con chip M3, pantalla Liquid Retina XDR de 14 pulgadas y hasta 22 horas de batería."
+                    category: "electronics"
+                    price: 2399.99
+                    inStock: true
+                    tags: ["laptop", "apple", "profesional", "m3"]
+                    specifications:
+                      brand: "Apple"
+                      processor: "M3"
+                      ram: "16GB"
+                      storage: "512GB SSD"
+                    ratings: []
         '400':
           description: Datos inválidos
           content:
@@ -311,9 +514,24 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Datos del producto inválidos
+                    example: "El nombre del producto debe tener entre 3 y 60 caracteres"
+              examples:
+                error_validacion:
+                  summary: Error de validación
+                  value:
+                    message: "El nombre del producto debe tener entre 3 y 60 caracteres"
+                error_precio:
+                  summary: Error en el precio
+                  value:
+                    message: "El precio debe ser mayor a 0"
+                error_categoria:
+                  summary: Error en categoría
+                  value:
+                    message: "La categoría debe ser una de: electronics, clothing, books, food"
   /products/{id}:
     get:
+      tags:
+        - Products
       parameters:
         - name: id
           in: path
@@ -330,6 +548,50 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
+              examples:
+                iphone_producto:
+                  summary: iPhone encontrado
+                  value:
+                    id: 1
+                    name: "iPhone 15 Pro Max 256GB"
+                    description: "El iPhone 15 Pro Max redefine la innovación con su diseño de titanio, cámara profesional de 48MP con zoom óptico 5x, y el potente chip A17 Pro."
+                    category: "electronics"
+                    price: 1399.99
+                    inStock: true
+                    tags: ["smartphone", "apple", "premium", "5g", "titanium"]
+                    specifications:
+                      brand: "Apple"
+                      model: "iPhone 15 Pro Max"
+                      storage: "256GB"
+                      color: "Titanio Natural"
+                      screen_size: "6.7 pulgadas"
+                      camera: "48MP Principal + 12MP Ultra Gran Angular + 12MP Teleobjetivo"
+                    ratings:
+                      - score: 5
+                        comment: "Excelente teléfono, la cámara es increíble y la batería dura todo el día"
+                      - score: 4
+                        comment: "Muy buena calidad, aunque el precio es elevado"
+                libro_producto:
+                  summary: Libro encontrado
+                  value:
+                    id: 3
+                    name: "Cien Años de Soledad"
+                    description: "Obra maestra de Gabriel García Márquez. Edición conmemorativa del clásico del realismo mágico latinoamericano."
+                    category: "books"
+                    price: 25.99
+                    inStock: false
+                    tags: ["literatura", "clásico", "realismo mágico", "latinoamérica"]
+                    specifications:
+                      author: "Gabriel García Márquez"
+                      pages: "432"
+                      publisher: "Editorial Sudamericana"
+                      language: "Español"
+                      isbn: "978-84-376-0494-7"
+                    ratings:
+                      - score: 5
+                        comment: "Una obra maestra de la literatura universal"
+                      - score: 5
+                        comment: "Lectura obligatoria, narrativa increíble"
         '404':
           description: Producto no encontrado
           content:
@@ -339,8 +601,15 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Producto no encontrado
+                    example: "Producto con ID 9999 no encontrado"
+              examples:
+                producto_no_encontrado:
+                  summary: Producto no encontrado
+                  value:
+                    message: "Producto con ID 9999 no encontrado"
     put:
+      tags:
+        - Products
       parameters:
         - name: id
           in: path
@@ -413,6 +682,8 @@ paths:
                     type: string
                     example: Datos del producto inválidos
     patch:
+      tags:
+        - Products
       parameters:
         - name: id
           in: path
@@ -481,6 +752,8 @@ paths:
                     type: string
                     example: Datos del producto inválidos
     delete:
+      tags:
+        - Products
       parameters:
         - name: id
           in: path
@@ -493,6 +766,12 @@ paths:
       responses:
         '204':
           description: Producto eliminado exitosamente
+          content:
+            application/json:
+              examples:
+                producto_eliminado:
+                  summary: Producto eliminado
+                  value: null
         '404':
           description: Producto no encontrado
           content:
@@ -502,4 +781,9 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Producto no encontrado
+                    example: "Producto con ID 9999 no encontrado para eliminar"
+              examples:
+                producto_no_encontrado_delete:
+                  summary: No se puede eliminar - producto no existe
+                  value:
+                    message: "Producto con ID 9999 no encontrado para eliminar"
