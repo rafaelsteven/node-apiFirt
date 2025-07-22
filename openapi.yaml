@@ -9,6 +9,56 @@ components:
   schemas:
     HelloResponse:
       type: object
+    Product:
+      type: object
+      required:
+        - name
+        - price
+        - category
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+          minLength: 3
+          maxLength: 60
+        description:
+          type: string
+          maxLength: 500
+        category:
+          type: string
+          enum: [electronics, clothing, books, food]
+        inStock:
+          type: boolean
+          default: true
+        tags:
+          type: array
+          items:
+            type: string
+        price:
+          type: number
+          minimum: 0
+          multipleOf: 0.01
+        specifications:
+          type: object
+          additionalProperties:
+            type: string
+        ratings:
+          type: array
+          items:
+            type: object
+            required:
+              - score
+              - comment
+            properties:
+              score:
+                type: integer
+                minimum: 1
+                maximum: 5
+              comment:
+                type: string
+                maxLength: 500
 paths:
   /hello:
     get:
@@ -104,4 +154,349 @@ paths:
                   message:
                     type: string
                     example: Usuario no encontrado example
-                
+    patch:
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del usuario a actualizar
+          schema:
+            type: integer
+            format: int64
+      summary: Actualizar un usuario existente
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                age:
+                  type: integer
+                  format: int32
+                phone:
+                  type: string
+              required:
+                - name
+                - email
+                - phone
+      responses:
+        '200':
+          description: Usuario actualizado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    format: int64
+                  name:
+                    type: string
+                  email:
+                    type: string
+                  age:
+                    type: integer
+                    format: int32
+                  phone:
+                    type: string
+        '404':
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Usuario no encontrado example
+  /products:
+    get:
+      summary: Obtener todos los productos
+      parameters:
+        - name: category
+          in: query
+          required: false
+          description: Filtrar productos por categoría
+          schema:
+            type: string
+            enum: [electronics, clothing, books, food]
+        - name: inStock
+          in: query
+          required: false
+          description: Filtrar productos en stock
+          schema:
+            type: boolean
+        - name: minPrice
+          in: query
+          required: false
+          description: Precio mínimo
+          schema:
+            type: number
+            minimum: 0
+        - name: maxPrice
+          in: query
+          required: false
+          description: Precio máximo
+          schema:
+            type: number
+            minimum: 0
+      responses:
+        '200':
+          description: Lista de productos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+    post:
+      summary: Crear un nuevo producto
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 3
+                  maxLength: 60
+                description:
+                  type: string
+                  maxLength: 500
+                category:
+                  type: string
+                  enum: [electronics, clothing, books, food]
+                inStock:
+                  type: boolean
+                  default: true
+                tags:
+                  type: array
+                  items:
+                    type: string
+                price:
+                  type: number
+                  minimum: 0
+                  multipleOf: 0.01
+                specifications:
+                  type: object
+                  additionalProperties:
+                    type: string
+              required:
+                - name
+                - price
+                - category
+      responses:
+        '201':
+          description: Producto creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: Datos inválidos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Datos del producto inválidos
+  /products/{id}:
+    get:
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del producto
+          schema:
+            type: integer
+            format: int64
+      summary: Obtener producto por ID
+      responses:
+        '200':
+          description: Producto encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Producto no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Producto no encontrado
+    put:
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del producto a actualizar
+          schema:
+            type: integer
+            format: int64
+      summary: Actualizar completamente un producto
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 3
+                  maxLength: 60
+                description:
+                  type: string
+                  maxLength: 500
+                category:
+                  type: string
+                  enum: [electronics, clothing, books, food]
+                inStock:
+                  type: boolean
+                tags:
+                  type: array
+                  items:
+                    type: string
+                price:
+                  type: number
+                  minimum: 0
+                  multipleOf: 0.01
+                specifications:
+                  type: object
+                  additionalProperties:
+                    type: string
+              required:
+                - name
+                - price
+                - category
+      responses:
+        '200':
+          description: Producto actualizado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Producto no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Producto no encontrado
+        '400':
+          description: Datos inválidos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Datos del producto inválidos
+    patch:
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del producto a actualizar parcialmente
+          schema:
+            type: integer
+            format: int64
+      summary: Actualizar parcialmente un producto
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 3
+                  maxLength: 60
+                description:
+                  type: string
+                  maxLength: 500
+                category:
+                  type: string
+                  enum: [electronics, clothing, books, food]
+                inStock:
+                  type: boolean
+                tags:
+                  type: array
+                  items:
+                    type: string
+                price:
+                  type: number
+                  minimum: 0
+                  multipleOf: 0.01
+                specifications:
+                  type: object
+                  additionalProperties:
+                    type: string
+      responses:
+        '200':
+          description: Producto actualizado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Producto no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Producto no encontrado
+        '400':
+          description: Datos inválidos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Datos del producto inválidos
+    delete:
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del producto a eliminar
+          schema:
+            type: integer
+            format: int64
+      summary: Eliminar un producto
+      responses:
+        '204':
+          description: Producto eliminado exitosamente
+        '404':
+          description: Producto no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Producto no encontrado

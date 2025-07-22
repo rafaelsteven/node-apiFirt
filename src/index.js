@@ -7,7 +7,11 @@ const app = express();
 const port = 3000;
 
 const swaggerDocument = YAML.load('./openapi.yaml');
-
+const users = [
+	{ id: 1, name: 'John Doe', email: 'john.doe@example.com', age: 30, phone: '123-456-7890' },
+	{ id: 2, name: 'Jane Smith', email: 'jane.smith@example.com', age: 25, phone: '987-654-3210' },
+	{ id: 3, name: 'Alice Johnson', email: 'alice.johnson@example.com', age: 28, phone: '555-555-5555' }
+];
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(express.json());
 
@@ -37,10 +41,22 @@ app.post('/users', (req, res) => {
 
 app.get('/users/:id', (req, res) => {
   const userId = req.params.id;
-  if (userId !== 1) {
+  const user = users.find(u => u.id === parseInt(userId));
+  if (!user) {
 	return res.status(404).json({ message: 'User not found' });
   }
-  return res.status(200).json({ id: userId, name: 'John Doe', email: 'john.doe@example.com', age: 30, phone: '123-456-7890' });
+  return res.status(200).json(user);
+});
+
+app.patch('/users/:id', (req, res) => {
+  const userId = req.params.id;
+  const { name, email, age, phone } = req.body;
+  const user = users.find(u => u.id === parseInt(userId));
+  if (!user) {
+	return res.status(404).json({ message: 'User not found' });
+  }
+  Object.assign(user, { name, email, age, phone });
+  return res.status(200).json(user);
 });
 
 app.listen(port, () => {
